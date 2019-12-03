@@ -31,22 +31,20 @@ defmodule Day1 do
   defp read_and_convert_input() do
     :code.priv_dir(:day_1)
     |> Path.join("input.txt")
-    |> File.read!()
-    |> String.split("\n", trim: true)
-    |> Enum.map(fn mass ->
+    |> File.stream!()
+    |> Stream.map(&String.trim/1)
+    |> Stream.map(fn mass ->
       {m, ""} = Integer.parse(mass)
 
       m
     end)
   end
 
+  defp do_solution_2_calculation(0), do: 0
+
   defp do_solution_2_calculation(mass) do
     {:ok, fuel} = Day1.Calculator.calculate(mass)
 
-    if fuel <= 0 do
-      0
-    else
-      fuel + do_solution_2_calculation(fuel)
-    end
+    fuel + do_solution_2_calculation(fuel)
   end
 end
